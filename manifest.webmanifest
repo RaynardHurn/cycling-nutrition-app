@@ -1,0 +1,25 @@
+{
+  "id": "./",
+  "name": "Cycling Nutrition & Training",
+  "short_name": "Cycling Fuel",
+  "description": "Ride planning, custom workouts, fueling, meals and training calendar",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7f9",
+  "theme_color": "#102c3e",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

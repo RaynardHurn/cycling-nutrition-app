@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cycling Nutrition Calculator | 2027</title>
+<style>
+:root{--navy:#102c3e;--ink:#193549;--orange:#f18b24;--orange-dark:#d87012;--pale:#fff2e2;--muted:#647988;--border:#dbe4e9;--bg:#f5f7f9;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:var(--ink)}*{box-sizing:border-box}body{margin:0;background:var(--bg)}header{background:linear-gradient(120deg,#0d2535,#183b4e);color:white;border-bottom:6px solid var(--orange)}.width{max-width:1040px;margin:auto;padding:24px}.hero{padding-top:30px;padding-bottom:30px}.eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ffc078;font-weight:800}h1{font-size:clamp(28px,4vw,42px);margin:8px 0 7px;line-height:1.1}header p{color:#d2e0e8;margin:0;font-size:14px}main{padding-top:0}.panel{background:#fff;border:1px solid #ebeff2;border-radius:16px;box-shadow:0 8px 30px rgba(11,33,49,.06);margin-top:18px;padding:24px}h2{font-size:20px;margin:0 0 5px;color:var(--navy)}.sub{margin:0 0 21px;color:var(--muted);font-size:13px;line-height:1.5}.inputs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}label{display:block;font-weight:750;font-size:13px;margin-bottom:8px}select,input{width:100%;padding:12px 13px;border:1.5px solid #bdcdd7;border-radius:10px;background:#fff;color:var(--navy);font:inherit;font-size:16px}input:focus,select:focus{outline:3px solid #ffe0bb;border-color:var(--orange)}input:disabled{background:#eef2f4;color:#758692}input[readonly]{background:#fff;border-color:#bdcdd7;font-weight:400}small{display:block;margin-top:6px;color:var(--muted);line-height:1.4}.pill{display:inline-block;background:#fff0d8;color:#a7560c;border-radius:99px;padding:5px 10px;font-weight:800;font-size:11px;margin-left:7px}.meters{margin-top:21px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.meter{padding:19px 17px;border-radius:12px;background:var(--navy);color:#fff;border:1px solid var(--navy)}.meter.primary{background:var(--navy);color:#fff;border-color:var(--navy)}.meter.primary .m-label{color:#bbccd8}.m-label{display:block;font-size:12px;color:#bbccd8;font-weight:700}.m-value{font-size:clamp(22px,3vw,30px);font-weight:850;margin-top:9px;display:block;letter-spacing:-.5px}.help{margin-top:20px;border-left:4px solid var(--orange);padding:11px 15px;background:#fff6eb;border-radius:5px;font-size:13px;line-height:1.6}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}button{border:0;border-radius:10px;padding:12px 18px;background:var(--orange);color:#fff;font-weight:800;cursor:pointer}button.secondary{background:var(--navy)}button:hover{filter:brightness(.96)}.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;background:var(--navy);color:#fff;padding:12px}td{padding:11px 12px;border-bottom:1px solid var(--border)}tr:nth-child(even) td{background:#f8fafb}.note{font-size:12px;color:var(--muted);line-height:1.6;margin-top:13px}.foot{font-size:12px;color:var(--muted);padding:20px 0 35px}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.mini{border:1px solid #e6edf1;border-radius:12px;padding:15px}.mini strong{display:block;margin-bottom:7px}.mini p{font-size:13px;line-height:1.6;color:#4f6371;margin:0}#status{font-size:12px;color:#476b47}.wide{grid-column:span 2}@media(max-width:760px){.inputs,.meters{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}.panel{padding:17px}.width{padding:15px}}@media(max-width:470px){.inputs,.meters{grid-template-columns:1fr}.wide{grid-column:span 1}}@media print{header{-webkit-print-color-adjust:exact;print-color-adjust:exact}.meter,th{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:#fff}.panel{box-shadow:none;break-inside:avoid}button{display:none}}
+
+/* Integrated meal planner */
+.meal-top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:14px 0}.meal-top .sub{margin:0;max-width:650px}.meal-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.meal-card{border:1px solid #dfe7eb;border-radius:13px;overflow:hidden;background:#fff}.meal-head{background:#f5f8fa;padding:13px 15px;border-bottom:3px solid var(--orange)}.meal-head .micro{color:#677e8c;font-weight:800;text-transform:uppercase;font-size:11px;letter-spacing:.6px}.meal-head select{margin-top:9px;font-size:14px;padding:9px}.meal-body{padding:13px 15px}.meal-body h3{font-size:16px;margin:0 0 10px;color:var(--navy)}.ingredients{margin:0;padding-left:17px;font-size:13px;line-height:1.8;color:#344e5f}.meal-macros{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.meal-macros span{font-size:12px;background:var(--pale);color:#7d470f;padding:5px 8px;border-radius:6px;font-weight:750}.meal-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}.meal-stat{background:#102c3e;color:white;border-radius:12px;padding:13px 15px}.meal-stat label{color:#b8cbd6;font-size:11px;margin:0 0 6px}.meal-stat strong{font-size:22px}.meal-alert{background:#fff7ec;border-left:4px solid var(--orange);border-radius:7px;padding:12px 14px;font-size:13px;line-height:1.65;color:#405568}.meal-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.meal-actions button{font-size:13px}.meal-actions button.secondary{background:#102c3e}.protein-detail{margin-top:16px;padding:15px;border:1px solid #eadccb;background:#fffaf4;border-radius:12px;font-size:13px;line-height:1.65}.protein-detail strong{color:#102c3e}.meal-divider{margin:15px 0;border:0;border-top:1px solid var(--border)}
+@media(max-width:820px){.meal-grid{grid-template-columns:1fr 1fr}.meal-summary{grid-template-columns:repeat(3,1fr)}}@media(max-width:600px){.meal-grid{grid-template-columns:1fr}.meal-summary{grid-template-columns:1fr}.meal-stat{padding:10px 14px}}
+.main-nav{background:#112d40;border-bottom:1px solid #284456}.nav-inner{display:flex;gap:10px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}.nav-button{background:transparent;border:1px solid transparent;color:#d7e3e9;padding:10px 16px;box-shadow:none}.nav-button.selected{background:var(--orange);color:white}.nav-button:hover{background:#27465a}.nav-button.selected:hover{background:var(--orange)}#page-plan[hidden],#page-meals[hidden],#page-info[hidden],#page-settings[hidden]{display:none!important}#settings-status{font-size:13px;color:#325c45}.meal-head select{font-weight:400}#hourcarbs{font-weight:400!important}.muted-note{color:var(--muted);font-size:12px}@media(max-width:600px){.nav-inner{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.nav-button{padding:11px 7px;font-size:12px}}
+input[readonly]{background:#fff!important;color:#183448;cursor:default}
+/* Additional Calendar / Workout Builder pages; original nutrition styling preserved */
+.calendar-toolbar{display:flex;gap:11px;align-items:center;flex-wrap:wrap;margin:20px 0 14px}.calendar-toolbar h3{font-size:17px;margin:0 auto;color:var(--navy)}.mini-secondary,.mini-orange{font:inherit;font-size:13px;font-weight:750;cursor:pointer;border-radius:9px;padding:10px 13px;border:1px solid var(--border)}.mini-secondary{background:white;color:var(--navy)}.mini-orange{background:var(--orange);color:#fff;border-color:var(--orange)}.cal-weekheads,.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.cal-weekheads span{text-align:center;font-size:12px;font-weight:800;color:var(--muted);padding-bottom:8px}.cal-cell{min-height:90px;background:white;border:1px solid var(--border);border-radius:9px;padding:8px;cursor:pointer;text-align:left;color:var(--ink);font:inherit;overflow:hidden}.cal-cell.is-other{opacity:.4}.cal-cell.is-selected{border:2px solid var(--orange);background:var(--pale)}.cal-cell.is-today .cal-number{background:var(--navy);color:white;border-radius:30px;padding:2px 6px}.cal-number{font-size:12px;font-weight:800}.cal-chip{margin-top:5px;background:#e8eef3;border-left:3px solid var(--orange);padding:4px 5px;border-radius:4px;font-size:10px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cal-list-item{border:1px solid var(--border);border-radius:11px;padding:14px;margin:8px 0;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.cal-list-item strong{display:block}.cal-list-item small{display:block;margin-top:5px}.cal-actions{margin-top:14px}.wb-block-head,.wb-block{display:grid;grid-template-columns:minmax(150px,1.55fr) repeat(5,minmax(65px,.9fr)) 38px;gap:8px;align-items:end}.wb-block-head{font-size:10px;letter-spacing:.3px;font-weight:800;color:var(--muted);margin:20px 0 7px}.wb-block{border:1px solid var(--border);border-radius:10px;background:#f9fbfc;padding:10px;margin-bottom:8px}.wb-block input,.wb-block select{font-size:13px;padding:9px 6px;width:100%;min-width:0}.wb-block button{width:35px;height:37px;border:1px solid #e5c6b5;border-radius:8px;color:#a43f1b;background:#fff4ef;cursor:pointer}.wb-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:20px}.wb-summary div{background:var(--navy);color:white;padding:15px;border-radius:12px}.wb-summary small{display:block;color:#c7d9e3;font-size:11px;margin:0 0 6px}.wb-summary strong{font-size:21px}.builder-meta{margin-bottom:4px}@media(max-width:760px){.cal-cell{min-height:75px;padding:4px}.cal-chip{font-size:9px;padding:2px 3px}.wb-block-head{display:none}.wb-block{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.wb-block>*:first-child{grid-column:span 2}.wb-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.wb-block button{justify-self:end}.calendar-toolbar h3{width:100%;text-align:center;order:-1}.cal-cell{font-size:12px}}@media(max-width:430px){.cal-cell{min-height:61px}.cal-chip{font-size:8px;line-height:1.2;max-height:25px;white-space:normal}.cal-weekheads span{font-size:10px}}
+
+/* All power zones — compact responsive settings display */
+.all-zones{margin-top:19px;border:1px solid var(--border);border-radius:13px;overflow:hidden;background:#fff}
+.all-zones-title{background:var(--navy);color:#fff;padding:14px 17px;font-weight:800;font-size:15px}
+.zone-labels,.zone-line{display:grid;grid-template-columns:minmax(82px,1.1fr) minmax(102px,.9fr) 16px minmax(102px,.9fr);column-gap:14px;align-items:center;padding:10px 17px}
+.zone-labels{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#617786;background:#f5f8fa;font-weight:800;border-bottom:1px solid var(--border)}
+.zone-line{border-bottom:1px solid #e6edf1;min-height:56px}
+.zone-line:last-child{border-bottom:0}
+.zone-name{font-weight:750;font-size:13px;color:var(--navy)}
+.zone-sub{display:block;color:var(--muted);font-size:11px;font-weight:400;margin-top:2px}
+.zone-watt{border:1px solid #c6d5df;background:#fff;color:var(--navy);font-size:15px;border-radius:8px;padding:9px 10px;min-width:0;line-height:1.2;font-variant-numeric:tabular-nums}
+.zone-divider{text-align:center;color:var(--muted);font-size:12px}
+.zone-caption{font-size:12px;color:var(--muted);line-height:1.55;margin:11px 0 0}
+@media(max-width:470px){.zone-labels,.zone-line{grid-template-columns:minmax(70px,1fr) minmax(63px,.8fr) 11px minmax(63px,.8fr);gap:6px;padding:10px 8px}.zone-name{font-size:12px}.zone-sub{font-size:10px}.zone-watt{font-size:13px;padding:9px 6px}.all-zones-title{padding:12px}.zone-labels{font-size:10px}}
+
+/* Structured workout builder — standalone steps and repeat groups */
+.wb-actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+.wb-step{border:1px solid var(--border);background:#fff;border-radius:12px;padding:13px;margin:10px 0}
+.wb-step-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.wb-step-top strong{color:var(--navy);font-size:13px}
+.wb-step-fields{display:grid;grid-template-columns:minmax(130px,1.2fr) repeat(2,minmax(92px,.85fr));gap:11px}
+.wb-step-fields label,.wb-repeat-fields label{font-size:12px;color:var(--navy)}
+.wb-step-fields input,.wb-step-fields select,.wb-repeat-fields input{width:100%;min-width:0;padding:10px;border:1px solid #c6d5df;border-radius:8px;background:#fff;font:inherit;font-size:14px}
+.wb-icon{display:inline-flex;align-items:center;justify-content:center;text-align:center;flex:0 0 36px;background:#fff6ef;border:1px solid #f1cfb2;border-radius:8px;color:#a44d1b;cursor:pointer;width:36px;min-width:36px;height:32px;padding:0!important;margin:0;line-height:1;font-size:19px;font-weight:400}
+.wb-repeat{border:1px solid #f3b672;background:#fff8ef;border-radius:14px;margin:15px 0;padding:15px}
+.wb-repeat-bar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.wb-repeat-title{font-size:15px;color:var(--navy);font-weight:800}
+.wb-repeat-fields{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin:12px 0}
+.wb-repeat-fields>div{width:160px;max-width:100%}
+.wb-repeat-steps{padding-left:14px;border-left:4px solid var(--orange)}
+.wb-repeat .wb-step{margin:8px 0;background:#fff}
+.wb-empty{border:1px dashed #b9cbd4;border-radius:10px;padding:22px;text-align:center;color:var(--muted);background:#f8fafb}
+.wb-muted{font-size:12px;color:var(--muted)}
+.wb-step-error{border-color:#ce6a46;background:#fff8f4}
+@media(max-width:620px){.wb-step-fields{grid-template-columns:1fr 1fr}.wb-step-fields>div:first-child{grid-column:1/-1}.wb-repeat-steps{padding-left:8px}.wb-repeat{padding:10px}.wb-repeat-fields>div{width:110px}}
+</style>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#102c3e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cycling Fuel">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+</head><body>
+<header><div class="width hero"><div class="eyebrow">2027 Performance Nutrition</div><h1>CYCLING FUELING CALCULATOR</h1><p><span id="profile-heading">Personal reference · 70 kg · FTP 316 W</span> · Works offline</p></div></header>
+<nav class="main-nav" aria-label="Calculator pages"><div class="width nav-inner"><button type="button" id="nav-plan" class="nav-button selected" aria-current="page">Build your ride plan</button><button type="button" id="nav-meals" class="nav-button">Meal Planner</button><button type="button" id="nav-info" class="nav-button">Information</button><button type="button" id="nav-calendar" class="nav-button">Calendar</button><button type="button" id="nav-builder" class="nav-button">Workout Builder</button><button type="button" id="nav-settings" class="nav-button">Settings</button></div></nav>
+<main class="width">
+<div id="page-plan">
+<section class="panel"><h2>01 / Build your ride plan <span class="pill">AUTO</span></h2><p class="sub">Select the workout and duration. Your carbohydrate intake per hour and daily carbohydrate target are calculated automatically using the ranges in your nutrition guide.</p>
+<div class="inputs">
+<div><label for="type">Workout type</label><select id="type"><option value="rest">Rest day</option><option value="recovery">Active recovery</option><option value="endurance" selected>Endurance</option><option value="threshold">Threshold / over-unders</option><option value="vo2">VO₂max</option><option value="race">Race day</option></select></div>
+<div><label for="hours">Hours</label><input id="hours" type="number" inputmode="decimal" step="0.5" min="0" max="12" value="1"></div>
+<div><label for="mins">Additional minutes</label><input id="mins" type="number" inputmode="numeric" step="1" min="0" max="59" value="30"></div>
+<div><label for="power">Expected average power (W)</label><input id="power" type="number" inputmode="decimal" step="1" min="0" max="600" value="190"></div>
+<div><label for="daily">Daily carb target (g/kg)</label><input id="daily" type="text" inputmode="decimal" value="5"></div>
+<div><label for="hourcarbs">On-bike carbohydrate (g/h)</label><input id="hourcarbs" type="text" readonly value="55"></div>
+</div>
+<div class="meters" aria-live="polite">
+<div class="meter primary"><span class="m-label">ON-BIKE / HOUR</span><output class="m-value" id="out-rate">55 g/h</output></div>
+<div class="meter primary"><span class="m-label">TOTAL RIDE FUEL</span><output class="m-value" id="out-total">83 g</output></div>
+<div class="meter"><span class="m-label">DAILY CARBOHYDRATE</span><output class="m-value" id="out-daily">350 g</output></div>
+<div class="meter"><span class="m-label">CARBS LEFT FOR MEALS</span><output class="m-value" id="out-meals">267 g</output></div>
+<div class="meter"><span class="m-label">ESTIMATED WORK</span><output class="m-value" id="out-kj">1,026 kJ</output></div>
+<div class="meter"><span class="m-label">CYCLING ENERGY · APPROX.</span><output class="m-value" id="out-kcal">975–1,231 kcal</output></div>
+</div>
+<div class="help" id="advice">For a 1.5-hour endurance ride, your automatic target is 55 g/h. This is 82.5 g total, rounded to 83 g to pack.</div>
+<div class="row"><button id="copy">Copy ride plan</button><span id="status" role="status"></span></div>
+</section>
+
+<footer class="foot">Cycling Nutrition System • Personal training reference • Drink and fuel to tolerance; assess your overall daily energy intake and recovery, especially in high-volume training.</footer>
+</div>
+<div id="page-meals" hidden>
+<section class="panel"><h2>Meal Planner <span class="pill">LINKED TO RIDE PLAN</span></h2><p class="sub">Your suggested portions update automatically when the ride plan changes. Return to Build Your Ride Plan to adjust the session, then come back here to choose meals.</p></section>
+<section class="panel" id="foodplanner"><h2>Your automatic meal planner <span class="pill">LINKED TO RIDE</span></h2>
+<p class="sub">Choose your ride above. This planner automatically uses the daily carbohydrates remaining after ride fuel, then suggests exact ingredient portions for breakfast, lunch, dinner and flexible snacks. Use “New meal ideas” for different dishes.</p>
+<div class="meal-summary">
+  <div class="meal-stat"><label>CARBS AVAILABLE FOR FOOD</label><strong id="food-budget">—</strong></div>
+  <div class="meal-stat"><label>DAILY PROTEIN GUIDELINE</label><strong id="protein-goal">—</strong></div>
+  <div class="meal-stat"><label>PROTEIN FROM FOOD IDEAS</label><strong id="protein-provided">—</strong></div>
+</div>
+<div class="meal-grid" id="meals">
+ <article class="meal-card"><div class="meal-head"><span class="micro">Breakfast</span><select id="pick-breakfast" aria-label="Breakfast meal"></select></div><div class="meal-body" id="meal-breakfast"></div></article>
+ <article class="meal-card"><div class="meal-head"><span class="micro">Lunch</span><select id="pick-lunch" aria-label="Lunch meal"></select></div><div class="meal-body" id="meal-lunch"></div></article>
+ <article class="meal-card"><div class="meal-head"><span class="micro">Dinner</span><select id="pick-dinner" aria-label="Dinner meal"></select></div><div class="meal-body" id="meal-dinner"></div></article>
+</div>
+<hr class="meal-divider"/>
+<div class="meal-grid" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr))">
+ <article class="meal-card"><div class="meal-head"><span class="micro">Flexible snack</span><select id="pick-snack" aria-label="Snack suggestion"></select></div><div class="meal-body" id="meal-snack"></div></article>
+ <article class="meal-card"><div class="meal-head"><span class="micro">Today's food balance</span></div><div class="meal-body"><h3>Meals + on-bike fuel</h3><div class="meal-macros"><span id="carb-planned">—</span><span id="meal-protein-planned">—</span></div><p class="note" id="balance-detail">Calculated meal targets will appear here.</p></div></article>
+</div>
+<div class="protein-detail" id="protein-note"></div>
+<div class="meal-alert" style="margin-top:14px">All amounts are estimates based on standard food composition. Rice, pasta, potatoes, meat and vegetables are weighed <b>cooked</b>; oats and granola are weighed <b>dry</b>. Oat dishes use water for cooking and butter where listed; no milk is included. Weigh your actual portions and use product labels for precision. This is a carbohydrate-and-protein meal builder, <b>not a guarantee of total calorie adequacy</b>; include sufficient healthy fats, vegetables and additional food as needed, particularly during heavy training.</div>
+<div class="meal-actions"><button type="button" id="shuffle-meals">New meal ideas</button><button type="button" class="secondary" id="copy-food">Copy food and ride plan</button><span id="meal-status" role="status"></span></div>
+</section>
+</div>
+<div id="page-info" hidden>
+<section class="panel"><h2>Information / Fueling reference</h2><p class="sub">A separate reference page for fueling targets and calculation formulas.</p></section>
+<section class="panel"><h2>Automatic fueling rules</h2><p class="sub">These specific default rates sit within the broader carbohydrate ranges in your PDF. They are starting targets, not hard physiological thresholds.</p><div class="tablewrap"><table><thead><tr><th>Ride duration</th><th>Endurance</th><th>Threshold / VO₂max</th><th>Race day</th></tr></thead><tbody>
+<tr><td>Up to 45 min</td><td>0 g/h</td><td>0 g/h</td><td>0–30 g/h</td></tr>
+<tr><td>More than 45–75 min</td><td>25 g/h</td><td>40 g/h</td><td>60 g/h</td></tr>
+<tr><td>More than 75–120 min</td><td>55 g/h</td><td>70–75 g/h</td><td>75–80 g/h</td></tr>
+<tr><td>More than 2–3 h</td><td>65 g/h</td><td>80 g/h</td><td>85 g/h</td></tr>
+<tr><td>More than 3–4 h</td><td>75 g/h</td><td>85 g/h</td><td>90 g/h*</td></tr>
+<tr><td>Over 4 h</td><td>80 g/h</td><td>85 g/h</td><td>90 g/h*</td></tr>
+</tbody></table></div><p class="note">*Your 90 g/h race target is appropriate only if you tolerate it. You have successfully used 90 g/h during a race, but sometimes experience bloating. Try 75–80 g/h first if the conditions or your stomach make 90 g/h difficult. Active recovery defaults to 0 g/h; eating beforehand or drinking carbohydrates is still reasonable when needed.</p></section>
+<section class="panel"><h2>Simple fueling formulas</h2><div class="two"><div class="mini"><strong>Carbohydrate during riding</strong><p>Ride duration (hours) × on-bike carbs (g/h) = total grams to take with you.<br>Example: 1.5 h × 55 g/h = <b>82.5 g</b> ≈ 83 g.</p></div><div class="mini"><strong>Daily carbohydrate</strong><p>70 kg × recommended daily carbs (g/kg) = total daily carbs, including on-bike fuel. Subtract on-bike carbs for your meals and snacks.</p></div><div class="mini"><strong>TrainingPeaks kJ estimate</strong><p>Average power (W) × duration (hours) × 3.6 = work (kJ). For 190 W × 1.5 h, this is 1,026 kJ.</p></div><div class="mini"><strong>Recovery foundation</strong><p>Protein is useful on rest days too: aim around <b>105 g on rest/recovery days</b> and <b>112–119 g on most training days</b> at 70 kg. A hard training day can justify more. After training, plan roughly <b>25–35 g protein</b> in your next meal.</p></div></div><p class="note">The calculator uses your 70 kg reference. Energy expenditure is a broad approximation using 0.95–1.2 kcal per mechanical kJ and does not include your whole-day energy needs. The daily carbohydrate target remains editable; switching workout type or duration returns it to the recommended starting point.</p></section>
+</div>
+<div id="page-settings" hidden>
+<section class="panel"><h2>Settings / Athlete profile</h2><p class="sub">These settings are saved on this device. Your ride and meal calculations use them automatically.</p>
+<div class="inputs">
+<div><label for="setting-weight">Body weight (kg)</label><input id="setting-weight" type="number" min="30" max="180" step="0.1" value="70" inputmode="decimal"></div>
+<div><label for="setting-ftp">FTP (W)</label><input id="setting-ftp" type="number" min="80" max="600" step="1" value="316" inputmode="numeric"></div>
+
+
+</div>
+<div class="all-zones" aria-label="All six cycling power zones">
+<div class="all-zones-title">All power zones</div>
+<div class="zone-labels"><span>Zone</span><span>From (W)</span><span></span><span>To (W)</span></div>
+<div id="all-zones-rows"></div>
+</div>
+<p class="zone-caption">All values are displayed in watts and calculated from your FTP. Zone 6 has no fixed upper limit.</p>
+<div class="help"><strong>Automatic power zones:</strong> All six power zones update automatically when you change FTP. Values are rounded to the nearest whole watt (0.5 rounds up). <strong>Estimated power:</strong> Active recovery uses an easy average in Zone 1 and endurance uses an average within Zone 2. Race-day estimated power remains 280 W.</div>
+<div class="row"><button type="button" id="save-settings">Save settings</button><button type="button" id="reset-settings" class="secondary">Reset defaults</button><span id="settings-status" role="status"></span></div>
+</section>
+<section class="panel"><h2>Power estimate preview</h2><p class="sub">These figures are starting estimates for the calculator, not prescribed targets.</p>
+<div class="meters"><div class="meter"><span class="m-label">ZONE 1 RANGE</span><output class="m-value" id="preview-z1">0–176 W</output></div><div class="meter"><span class="m-label">ZONE 2 RANGE</span><output class="m-value" id="preview-z2">177–239 W</output></div><div class="meter"><span class="m-label">RECOVERY / ENDURANCE ESTIMATE</span><output class="m-value" id="preview-power">132 / 208 W</output></div></div>
+</section></div>
+
+<div id="page-calendar" hidden>
+<section class="panel"><h2>Training Calendar</h2><p class="sub">Add your custom workouts to dates, review planned training and open a day in the existing ride and meal planners.</p>
+<div class="calendar-toolbar"><button type="button" class="mini-secondary" id="cal-prev">‹ Previous</button><h3 id="cal-month-label" aria-live="polite"></h3><button type="button" class="mini-secondary" id="cal-next">Next ›</button><button type="button" class="mini-orange" id="cal-today">This month</button></div>
+<div class="cal-weekheads"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="calendar-grid" id="cal-grid"></div>
+</section>
+<section class="panel"><h2 id="selected-day-title">Selected day</h2><p class="sub">Workouts saved for this day. Your original ride and meal planners remain unchanged.</p><div id="cal-day-list"></div>
+<div class="cal-actions"><button type="button" class="mini-orange" id="cal-add-workout">+ Build a workout for this date</button></div></section>
+</div>
+<div id="page-builder" hidden>
+<section class="panel"><h2>Workout Builder</h2><p class="sub">Build a workout step by step, like a structured Garmin or TrainingPeaks workout. Add a regular step or a Repeat group containing several steps. You can leave fields blank while building; they are checked only when you save.</p>
+<div class="inputs builder-meta">
+<div><label for="wb-date">Workout date</label><input id="wb-date" type="date"></div>
+<div><label for="wb-title">Workout name</label><input id="wb-title" type="text" maxlength="90" placeholder="e.g. Threshold intervals"></div>
+<div><label for="wb-type">Workout type</label><select id="wb-type"><option value="endurance">Endurance</option><option value="threshold">Threshold / over-unders</option><option value="vo2">VO₂max</option><option value="recovery">Active recovery</option><option value="race">Race day</option></select></div>
+</div>
+<div class="wb-actions"><button type="button" class="mini-orange" id="wb-add">+ Add step</button><button type="button" class="mini-secondary" id="wb-add-repeat">+ Add Repeat group</button><button type="button" class="mini-secondary" id="wb-clear">Clear workout</button></div>
+<div id="wb-blocks" aria-label="Workout steps"></div>
+<div class="wb-summary"><div><small>Duration</small><strong id="wb-duration">—</strong></div><div><small>Average power</small><strong id="wb-avg">—</strong></div><div><small>Mechanical work</small><strong id="wb-kj">—</strong></div><div><small>On-bike carbs</small><strong id="wb-carbs">—</strong></div></div>
+<p class="sub" id="wb-note" style="margin-top:14px">Repeat groups perform all of their steps in order, then repeat the full group. Example: 5 rounds of 8 min threshold + 5 min recovery. Leave out the final recovery by setting the group to skip the last recovery step.</p>
+<div class="row" style="flex-wrap:wrap;gap:10px"><button type="button" class="mini-orange" id="wb-save">Save to calendar</button><button type="button" class="mini-secondary" id="wb-to-ride">Use in Build Your Ride Plan</button><span id="wb-message" role="status" class="sub" style="margin:0"></span></div>
+</section></div>
+</main>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const KEY='raynardCyclingSettingsV5AutoWatts';
+const INITIAL={weight:70,ftp:316,zone1pct:55.7,zone2pct:75.6};
+function valid(data){
+ if(!data || typeof data!=='object')return null;
+ const d={...INITIAL,...data,zone1pct:55.7,zone2pct:75.6};
+ for(const k of Object.keys(INITIAL))d[k]=Number(String(d[k]).replace(',','.'));
+ if(!(d.weight>=30&&d.weight<=180&&d.ftp>=80&&d.ftp<=600&&d.zone1pct>=1&&d.zone1pct<d.zone2pct&&d.zone2pct<=120))return null;
+ d.zone1=Math.round(d.ftp*d.zone1pct/100);
+ d.zone2=Math.round(d.ftp*d.zone2pct/100);
+ if(d.zone2<=d.zone1)return null;
+ return d;
+}
+let profile=valid(INITIAL);
+try{
+ const saved=JSON.parse(localStorage.getItem(KEY)) || JSON.parse(localStorage.getItem('raynardCyclingSettingsV4Pct'));
+ if(valid(saved))profile=valid(saved);
+ else {
+   // Migrate body weight and FTP only; legacy absolute-watt zones are replaced
+   // by percentage-based settings to avoid stale watt limits.
+   const old=JSON.parse(localStorage.getItem('raynardCyclingSettingsV3')) || JSON.parse(localStorage.getItem('raynardCyclingSettingsV2'));
+   if(old && Number(old.weight)>0 && Number(old.ftp)>0){
+    profile=valid({...INITIAL,weight:old.weight,ftp:old.ftp}) || valid(INITIAL);
+   }
+ }
+}catch(e){}
+window.cyclingProfile=profile;
+const defaults={rest:[0,0],recovery:[1,0],endurance:[1,30],threshold:[2,0],vo2:[1,30],race:[2,0]};
+function num(id){const n=Number(String($(id).value).trim().replace(',','.'));return Number.isFinite(n)?Math.max(0,n):0}
+function duration(){return num('hours')+Math.min(59,num('mins'))/60}
+function zonePower(type){
+ if(type==='rest')return 0;
+ if(type==='recovery')return Math.round(profile.zone1*.75);
+ if(type==='endurance')return Math.round((profile.zone1+profile.zone2)/2);
+ if(type==='threshold')return Math.round(profile.ftp*.64);
+ if(type==='vo2')return Math.round(profile.ftp*.62);
+ if(type==='race')return 280;
+ return 0;
+}
+function rate(type,h){
+ if(type==='rest'||type==='recovery'||h<=0)return 0;
+ if(type==='race')return h<=.75?30:h<=1.25?60:h<2?75:h<=2?80:h<=3?85:90;
+ if(h<=.75)return 0;
+ if(type==='endurance')return h<=1.25?25:h<2?55:h<=2?60:h<=3?65:h<=4?75:80;
+ if(type==='threshold')return h<=1.25?40:h<2?70:h<=2?75:h<=3?80:85;
+ if(type==='vo2')return h<=1.25?40:h<2?70:h<=2?75:h<=3?80:85;
+ return 0;
+}
+function daily(type,h){
+ if(type==='rest')return 3.5;
+ if(type==='recovery')return h<=1?4.5:5;
+ if(type==='endurance')return h<=1.25?4.5:h<2?5:h<=2?6:h<=3?7:h<=4?9:9.5;
+ if(type==='threshold')return h<=1.25?6:h<=2?7:h<=3?8:9;
+ if(type==='vo2')return h<=1.25?6:h<=2?7.5:h<=3?8:9;
+ if(type==='race')return h<=1.25?6:h<=2?7.5:h<=3?9:10;
+ return 5;
+}
+const fmt=n=>Math.round(n).toLocaleString('en-ZA');
+let manualDaily=false;
+function update(){
+ const type=$('type').value;
+ const h=type==='rest'?0:duration();
+ if(!manualDaily)$('daily').value=String(daily(type,h)).replace('.',',');
+ const carbsPerHour=rate(type,h);
+ $('hourcarbs').value=carbsPerHour;
+ const planned=h*carbsPerHour;
+ const target=profile.weight*num('daily');
+ const kj=h*(type==='rest'?0:num('power'))*3.6;
+ $('out-rate').textContent=fmt(carbsPerHour)+' g/h';
+ $('out-total').textContent=fmt(planned)+' g';
+ $('out-daily').textContent=fmt(target)+' g';
+ $('out-meals').textContent=fmt(Math.max(0,target-planned))+' g';
+ $('out-kj').textContent=fmt(kj)+' kJ';
+ $('out-kcal').textContent=fmt(.95*kj)+'–'+fmt(1.2*kj)+' kcal';
+ const condition=type==='race'&&carbsPerHour===90?' You have reached 90 g/h; use this only if your stomach tolerates it.':'';
+ $('advice').textContent=type==='rest'?'Rest day: no cycling time, average power or on-bike fuel. Eat to support recovery.':type==='recovery'?'Recovery ride: usually no on-bike carbohydrate is necessary. Eat adequately across the day.':'Automatic target: '+carbsPerHour+' g/h × '+h.toLocaleString('en-ZA',{maximumFractionDigits:2})+' h = '+planned.toLocaleString('en-ZA',{maximumFractionDigits:1})+' g on-bike carbohydrate (pack ~'+fmt(planned)+' g).'+condition;
+ document.dispatchEvent(new Event('nutritionUpdate'));
+}
+function changeType(){
+ const type=$('type').value;
+ const [h,m]=defaults[type];
+ $('hours').value=h;$('mins').value=m;$('power').value=zonePower(type);
+ const rest=type==='rest';
+ for(const id of ['hours','mins','power'])$(id).disabled=rest;
+ manualDaily=false;update();
+}
+function renderAllZones(ftpValue){
+ const host=$('all-zones-rows');
+ if(!host)return;
+ host.replaceChildren();
+ const ftp=Number(ftpValue);
+ if(!Number.isFinite(ftp)||ftp<80||ftp>600)return;
+ // Match established upper watt limits at 316W: 176, 239, 287, 334, 381.
+ const boundaries=[0.557,0.756,287/316,334/316,381/316].map(x=>Math.round(ftp*x));
+ const names=['Zone 1','Zone 2','Zone 3','Zone 4','Zone 5','Zone 6'];
+ const subtitles=['Recovery','Endurance','Tempo','Threshold','VO₂max','Anaerobic'];
+ for(let i=0;i<6;i++){
+  const row=document.createElement('div');row.className='zone-line';
+  const name=document.createElement('span');name.className='zone-name';name.textContent=names[i];
+  const sub=document.createElement('span');sub.className='zone-sub';sub.textContent=subtitles[i];name.appendChild(sub);
+  const min=document.createElement('span');min.className='zone-watt';min.textContent=String(i===0?0:boundaries[i-1]+1);
+  const sep=document.createElement('span');sep.className='zone-divider';sep.textContent='to';
+  const max=document.createElement('span');max.className='zone-watt';max.textContent=i===5?'No limit':String(boundaries[i]);
+  row.append(name,min,sep,max);host.appendChild(row);
+ }
+}
+function applySettingsToForm(){
+ $('setting-weight').value=profile.weight;
+ $('setting-ftp').value=profile.ftp;
+ $('profile-heading').textContent=`Personal reference · ${profile.weight} kg · FTP ${profile.ftp} W`;
+ $('preview-z1').textContent=`0–${profile.zone1} W`;
+ $('preview-z2').textContent=`${profile.zone1+1}–${profile.zone2} W`;
+ $('preview-power').textContent=`${zonePower('recovery')} / ${zonePower('endurance')} W`;
+ renderAllZones(profile.ftp);
+}
+function saveSettings(){
+ const candidate=valid({weight:num('setting-weight'),ftp:num('setting-ftp')});
+ if(!candidate){$('settings-status').textContent='Please enter valid weight and FTP values.';return}
+ Object.assign(profile,candidate);
+ try{localStorage.setItem(KEY,JSON.stringify(profile));$('settings-status').textContent='Settings saved on this browser.'}catch(e){$('settings-status').textContent='Settings applied, but the browser did not allow saving.'}
+ applySettingsToForm();
+ $('power').value=zonePower($('type').value);
+ manualDaily=false;update();
+}
+$('setting-ftp').addEventListener('input',()=>{
+ const n=num('setting-ftp');
+ renderAllZones(n>=80&&n<=600?n:NaN);
+});
+$('save-settings').addEventListener('click',saveSettings);
+$('reset-settings').addEventListener('click',()=>{Object.assign(profile,INITIAL);applySettingsToForm();saveSettings()});
+function showPage(which){
+ for(const page of ['plan','meals','info','settings']){
+   $('page-'+page).hidden=which!==page;
+   $('nav-'+page).classList.toggle('selected',which===page);
+   $('nav-'+page).setAttribute('aria-current',which===page?'page':'false');
+ }
+ try{window.scrollTo(0,0)}catch(e){}
+}
+for(const page of ['plan','meals','info','settings']){
+ $('nav-'+page).addEventListener('click',()=>showPage(page));
+}
+$('type').addEventListener('change',changeType);
+ for(const id of ['hours','mins'])$(id).addEventListener('input',()=>{manualDaily=false;update()});
+ $('power').addEventListener('input',update);
+ $('daily').addEventListener('input',()=>{manualDaily=true;update()});
+ $('copy').addEventListener('click',async()=>{
+ const plan=`Cycling fueling plan\nWeight: ${profile.weight} kg · FTP: ${profile.ftp} W\nWorkout: ${$('type').selectedOptions[0].text}\nDuration: ${$('hours').value} h + ${$('mins').value} min\nAverage power: ${$('power').value} W\nDaily carbs: ${$('daily').value} g/kg (${$('out-daily').textContent})\nOn-bike: ${$('out-rate').textContent}\nTotal ride carbs: ${$('out-total').textContent}\nCarbs for meals: ${$('out-meals').textContent}\nWork: ${$('out-kj').textContent}\nCycling calories: ${$('out-kcal').textContent}`;
+ try{if(!navigator.clipboard)throw Error('Clipboard unavailable');await navigator.clipboard.writeText(plan);$('status').textContent='Copied.'}catch(e){window.prompt('Copy your plan:',plan)}
+ });
+applySettingsToForm(); changeType();
+})();
+</script>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const profile=window.cyclingProfile;
+// Per 100 g (or 100 ml for liquids); approximate averages. Amounts below represent edible/cooked portions unless indicated.
+const food={
+ oats:{label:'Dry oats (cook with water)',c:66,p:13,k:389,unit:'g'},butter:{label:'Butter',c:0.1,p:0.9,k:717,unit:'g'},banana:{label:'Banana (peeled)',c:22.8,p:1.1,k:89,unit:'g'},honey:{label:'Honey',c:82,p:0.3,k:304,unit:'g'},
+ greek:{label:'High-protein Greek-style yoghurt',c:4,p:10,k:65,unit:'g'},bread:{label:'White bread',c:49,p:9,k:265,unit:'g'},eggs:{label:'Eggs',c:1.1,p:12.6,k:143,unit:'g'},jam:{label:'Jam',c:63,p:.3,k:250,unit:'g'},juice:{label:'Orange juice',c:10,p:.7,k:45,unit:'ml'},
+ granola:{label:'Granola (dry)',c:64,p:10,k:470,unit:'g'},rice:{label:'Cooked white rice',c:28,p:2.7,k:130,unit:'g'},chicken:{label:'Cooked chicken breast',c:0,p:31,k:165,unit:'g'},veg:{label:'Cooked mixed vegetables',c:7,p:2.5,k:40,unit:'g'},oil:{label:'Olive oil',c:0,p:0,k:884,unit:'g'},
+ pasta:{label:'Cooked pasta',c:30,p:5.8,k:158,unit:'g'},tomato:{label:'Tomato pasta sauce',c:7,p:1.5,k:50,unit:'g'},tortilla:{label:'Tortillas',c:52,p:8,k:310,unit:'g'},salad:{label:'Salad vegetables',c:4,p:1,k:25,unit:'g'},cheese:{label:'Cheese',c:1.5,p:25,k:380,unit:'g'},
+ beef:{label:'Cooked lean beef mince',c:0,p:27,k:210,unit:'g'},potato:{label:'Boiled potatoes',c:19,p:2,k:87,unit:'g'},hake:{label:'Cooked hake',c:0,p:24,k:110,unit:'g'},pretzel:{label:'Pretzels',c:78,p:10,k:380,unit:'g'},
+ peanut:{label:'Peanut butter',c:20,p:25,k:590,unit:'g'}
+};
+// Main carbohydrate source is automatically sized to match each meal's allocated share.
+const recipes={
+ breakfast:[
+ {name:'Oats with butter, banana & honey',main:'oats',fixed:{butter:10,banana:120,honey:15},max:210},
+ {name:'Eggs, toast & jam',main:'bread',fixed:{eggs:130,jam:20,juice:200},max:250},
+ {name:'Greek-style yoghurt, granola & banana',main:'granola',fixed:{greek:220,banana:100},max:210},
+ {name:'Peanut-butter banana toast',main:'bread',fixed:{peanut:30,banana:120,honey:10},max:240},
+ {name:'Oat porridge with butter & jam',main:'oats',fixed:{butter:12,jam:25,banana:80},max:210},
+ {name:'Breakfast egg and potato plate',main:'potato',fixed:{eggs:150,veg:100,oil:8},max:600},
+ {name:'Honey toast and yoghurt',main:'bread',fixed:{greek:180,honey:20,banana:80},max:250}
+ ],
+ lunch:[
+ {name:'Chicken and rice bowl',main:'rice',fixed:{chicken:110,veg:150,oil:12},max:650},
+ {name:'Chicken tomato pasta',main:'pasta',fixed:{chicken:110,tomato:130,oil:12},max:650},
+ {name:'Chicken wraps',main:'tortilla',fixed:{chicken:115,salad:100,cheese:25},max:360},
+ {name:'Beef and rice bowl',main:'rice',fixed:{beef:125,veg:120,oil:10},max:650},
+ {name:'Egg and potato lunch',main:'potato',fixed:{eggs:145,veg:130,oil:10},max:800},
+ {name:'Hake pasta',main:'pasta',fixed:{hake:130,tomato:120,veg:100},max:650},
+ {name:'Chicken and potato bowl',main:'potato',fixed:{chicken:120,veg:150,oil:10},max:800}
+ ],
+ dinner:[
+ {name:'Spaghetti bolognese',main:'pasta',fixed:{beef:115,tomato:140,oil:10},max:650},
+ {name:'Chicken, potatoes & vegetables',main:'potato',fixed:{chicken:125,veg:150,oil:15},max:800},
+ {name:'Hake with rice',main:'rice',fixed:{hake:135,veg:150,oil:10},max:650},
+ {name:'Chicken and tomato rice',main:'rice',fixed:{chicken:120,tomato:130,veg:130,oil:10},max:650},
+ {name:'Beef and potato plate',main:'potato',fixed:{beef:135,veg:150,oil:10},max:800},
+ {name:'Hake and potatoes',main:'potato',fixed:{hake:130,veg:120,oil:10},max:800},
+ {name:'Cheesy chicken pasta',main:'pasta',fixed:{chicken:115,cheese:30,tomato:110},max:650}
+ ],
+ snack:[
+ {name:'Greek-style yoghurt and granola',main:'granola',fixed:{greek:150},max:170},
+ {name:'Toast with jam',main:'bread',fixed:{jam:20},max:200},
+ {name:'Banana and pretzels',main:'pretzel',fixed:{banana:120},max:160},
+ {name:'Oats with butter and banana',main:'oats',fixed:{butter:8,banana:100},max:150},
+ {name:'Toast and peanut butter',main:'bread',fixed:{peanut:25},max:180},
+ {name:'Honey toast',main:'bread',fixed:{honey:25},max:220},
+ {name:'Yoghurt and banana',main:'banana',fixed:{greek:180},max:250}
+ ]
+};
+const groups=['breakfast','lunch','dinner','snack'];
+const picks={breakfast:0,lunch:0,dinner:0,snack:0};
+for(const group of groups){
+ const select=$('pick-'+group);
+ recipes[group].forEach((r,i)=>{const opt=document.createElement('option');opt.value=i;opt.textContent=r.name;select.appendChild(opt)});
+ select.addEventListener('change',()=>{picks[group]=Number(select.value);draw()});
+}
+function nutrition(id,grams){let f=food[id];return {c:f.c*grams/100,p:f.p*grams/100,k:f.k*grams/100}}
+function plan(recipe,target,type){
+ const factor=(type==='rest'||type==='recovery')?.82:type==='endurance'?.92:1;
+ const portions=Object.entries(recipe.fixed).map(([id,qty])=>({id,qty:['chicken','beef','hake','greek'].includes(id)?Math.round(qty*factor/5)*5:qty}));
+ const fixedC=portions.reduce((a,x)=>a+nutrition(x.id,x.qty).c,0);
+ const gramsNeeded=(target-fixedC)/food[recipe.main].c*100;
+ const mainGrams=Math.max(0,Math.min(recipe.max,Math.round(gramsNeeded/5)*5));
+ portions.unshift({id:recipe.main,qty:mainGrams});
+ let result={c:0,p:0,k:0};
+ for(const x of portions){const v=nutrition(x.id,x.qty);result.c+=v.c;result.p+=v.p;result.k+=v.k}
+ return {portions, ...result};
+}
+function proteinGoal(type){
+ if(type==='rest'||type==='recovery')return {g:Math.round(profile.weight*1.5),rate:1.5};
+ if(type==='endurance')return {g:Math.round(profile.weight*1.6),rate:1.6};
+ return {g:Math.round(profile.weight*1.7),rate:1.7};
+}
+function format(n){return Math.round(n).toLocaleString('en-ZA')}
+let currentSummary='';
+function draw(){
+ const type=$('type').value;
+ const carbsDaily=Number($('out-daily').textContent.replace(/[^\d]/g,''))||0;
+ const rideCarbs=Number($('out-total').textContent.replace(/[^\d]/g,''))||0;
+ const available=Math.max(0,carbsDaily-rideCarbs);
+ const protein=proteinGoal(type);
+ const shares={breakfast:.27,lunch:.29,dinner:.29,snack:.15};
+ let sumCarbs=0,sumProtein=0,sumK=0;
+ const lines=[];
+ for(const group of groups){
+  const recipe=recipes[group][picks[group]];
+  const target=available*shares[group];
+  const meal=plan(recipe,target,type);
+  sumCarbs+=meal.c;sumProtein+=meal.p;sumK+=meal.k;
+  const items=meal.portions.filter(x=>x.qty>0).map(x=>`${format(x.qty)} ${food[x.id].unit} ${food[x.id].label}`);
+  $('meal-'+group).innerHTML='';
+  const h=document.createElement('h3');h.textContent=recipe.name;
+  const ul=document.createElement('ul');ul.className='ingredients';
+  for(const item of items){const li=document.createElement('li');li.textContent=item;ul.appendChild(li)}
+  const badges=document.createElement('div');badges.className='meal-macros';
+  for(const val of [`${format(meal.c)} g carbs`,`${format(meal.p)} g protein`,`~${format(meal.k)} kcal`]){const badge=document.createElement('span');badge.textContent=val;badges.appendChild(badge)}
+  $('meal-'+group).append(h,ul,badges);
+  lines.push(`${group.toUpperCase()}: ${recipe.name}\n  ${items.join(' + ')}\n  ~${format(meal.c)} g carbs, ${format(meal.p)} g protein`);
+ }
+ $('food-budget').textContent=format(available)+' g';
+ $('protein-goal').textContent=format(protein.g)+' g';
+ $('protein-provided').textContent=format(sumProtein)+' g';
+ $('carb-planned').textContent=`${format(sumCarbs+rideCarbs)} g total carbs`;
+ $('meal-protein-planned').textContent=`${format(sumProtein)} g food protein`;
+ const difference=Math.round(carbsDaily-(sumCarbs+rideCarbs));
+ $('balance-detail').textContent=`Approximately ${format(sumCarbs)} g carbohydrates from suggested food plus ${format(rideCarbs)} g on-bike fuel. ${Math.abs(difference)<=10?'This is close to the daily carbohydrate target.':difference>0?`About ${difference} g carbohydrate still to add.`:`About ${-difference} g above the starting target.`} Food energy from the displayed meals is roughly ${format(sumK)} kcal, plus approximately ${format(rideCarbs*4)} kcal from on-bike carbohydrate. These numbers do not establish sufficient total daily energy; increase portions, include dietary fats and add snacks as needed.`;
+ const gap=Math.max(0,protein.g-sumProtein);
+ let msg=`<strong>Protein for ${type==='rest'?'rest day':type==='recovery'?'recovery day':'training'}:</strong> Starting guideline ${protein.rate} g/kg × ${profile.weight} kg = <strong>${protein.g} g/day</strong>. Protein also matters on rest days because muscle repair and adaptation continue after exercise. 112 g on a rest day is not automatically too much, but you do not need to force that exact number.`;
+ if(gap>5)msg+=` Your displayed meals provide ~${format(sumProtein)} g. If desired, add approximately <strong>${format(gap)} g protein</strong> through an ordinary food snack (for instance, Greek-style yoghurt, eggs or chicken).`;
+ else msg+=` These meal suggestions already provide roughly the daily guideline, so an additional protein shake is not necessary solely to reach a number.`;
+ $('protein-note').innerHTML=msg;
+ currentSummary=`Cycling nutrition food plan\n${$('type').selectedOptions[0].text}: ${$('hours').value}h ${$('mins').value}min\nDaily carbs ${format(carbsDaily)} g; ride carbs ${format(rideCarbs)} g; meals/snacks ${format(available)} g\nProtein guideline: ${protein.g} g\n\n${lines.join('\n\n')}\n\nEstimated food totals: ${format(sumCarbs)} g carbs, ${format(sumProtein)} g protein; plus ${format(rideCarbs)} g on-bike carbs.\nIngredient macros are estimates, verify labels and total daily energy.`;
+}
+function shuffle(){
+ for(const g of groups){let next=Math.floor(Math.random()*recipes[g].length);if(next===picks[g])next=(next+1)%recipes[g].length;picks[g]=next;$('pick-'+g).value=next;}
+ draw();
+}
+$('shuffle-meals').addEventListener('click',shuffle);
+$('copy-food').addEventListener('click',async()=>{
+ try{await navigator.clipboard.writeText(currentSummary);$('meal-status').textContent='Copied!'}catch(e){window.prompt('Copy food plan:',currentSummary)}
+});
+// Recalculate meals whenever the ride outputs or athlete settings change.
+document.addEventListener('nutritionUpdate',draw);
+// Also update the copied ride plan to include meals, without altering the existing copy button.
+const oldCopy=$('copy');oldCopy.textContent='Copy ride plan';
+// Initial choices are randomized once; later workout edits retain them until shuffled.
+shuffle();
+})();
+</script>
+
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const PAGES=['plan','meals','info','settings','calendar','builder'];
+function navigate(which){
+ for(const id of PAGES){const page=$('page-'+id),nav=$('nav-'+id);page.hidden=(which!==id);nav.classList.toggle('selected',which===id);nav.setAttribute('aria-current',which===id?'page':'false')}
+ if(which==='calendar')drawCalendar();
+ try{scrollTo({top:0,behavior:'instant'})}catch(e){}
+}
+for(const id of PAGES)$('nav-'+id).addEventListener('click',()=>navigate(id));
+const STORE='raynardTrainingCalendarV1';
+let saved=[];
+try {const data=JSON.parse(localStorage.getItem(STORE)||'[]'); if(Array.isArray(data))saved=data.filter(x=>x && /^\d{4}-\d{2}-\d{2}$/.test(x.date) && Array.isArray(x.blocks));}catch(e){}
+function persist(){try{localStorage.setItem(STORE,JSON.stringify(saved));return true}catch(e){alert('Your browser could not save workouts. Try another browser or enable local storage.');return false}}
+function keyDate(d){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
+function fromKey(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
+const today=new Date();let displayed=new Date(today.getFullYear(),today.getMonth(),1);let selected=keyDate(today);let editingId=null;
+const newStep=(name='Endurance')=>({kind:'step',name,minutes:'20',watts:'200'});
+const newRepeat=()=>({kind:'repeat',count:'',skipLastRecovery:false,steps:[newStep('Threshold'),newStep('Recovery')]});
+let blocks=[];
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function finiteNum(v){if(v===''||v===null||v===undefined)return NaN;return Number(String(v).replace(',','.'))}
+function validStep(step){const m=finiteNum(step.minutes),w=finiteNum(step.watts);return step&&step.kind==='step'&&Number.isFinite(m)&&m>0&&m<=1440&&Number.isFinite(w)&&w>=0&&w<=1500}
+function expandBlocks(list){
+ const expanded=[];
+ for(const item of list){
+  if(item.kind==='step'){if(!validStep(item))return null;expanded.push({name:item.name,minutes:finiteNum(item.minutes),watts:finiteNum(item.watts)})}
+  else if(item.kind==='repeat'){
+   const count=finiteNum(item.count);
+   if(!Number.isInteger(count)||count<2||count>60||!Array.isArray(item.steps)||!item.steps.length||!item.steps.every(validStep))return null;
+   for(let n=0;n<count;n++)for(let j=0;j<item.steps.length;j++){
+    const st=item.steps[j];
+    if(item.skipLastRecovery&&n===count-1&&j===item.steps.length-1&&st.name==='Recovery')continue;
+    expanded.push({name:st.name,minutes:finiteNum(st.minutes),watts:finiteNum(st.watts)});
+   }
+  }else return null;
+ }
+ return expanded;
+}
+function metrics(list=blocks){
+ if(!Array.isArray(list)||list.length===0)return null;
+ const expanded=expandBlocks(list);if(!expanded||!expanded.length)return null;
+ let min=0,weighted=0;
+ for(const b of expanded){min+=b.minutes;weighted+=b.minutes*b.watts}
+ if(min<=0||min>1440)return null;
+ return{minutes:Math.round(min*100)/100,avg:Math.round(weighted/min),kj:Math.round(weighted*60/1000)};
+}
+function carbRate(type,h){if(type==='recovery'||h<0.75)return 0;if(type==='endurance')return h<=1.25?20:h<=2?55:h<=3?65:75;if(type==='threshold'||type==='vo2')return h<=1.25?40:h<=2?75:80;if(type==='race')return h<=1.25?45:h<=2?70:h<=3?80:90;return 65}
+function element(tag,className,text){const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=text;return e}
+function inputField(parent,label,value,update,opts={}){
+ const div=element('div');const lab=element('label','',label);const inp=document.createElement('input');inp.type='number';inp.inputMode='decimal';inp.min=opts.min??0;inp.max=opts.max??1500;inp.step=opts.step??1;inp.placeholder=opts.placeholder??'Enter value';inp.value=value??'';
+ inp.addEventListener('input',()=>{update(inp.value);updateSummary()});div.append(lab,inp);parent.appendChild(div);return inp;
+}
+function renderStep(step,container,removeAction,number){
+ const row=element('div','wb-step');const top=element('div','wb-step-top');top.appendChild(element('strong','',`Step ${number}`));const remove=element('button','wb-icon','×');remove.type='button';remove.title='Remove step';remove.setAttribute('aria-label','Remove step');remove.addEventListener('click',removeAction);top.appendChild(remove);row.appendChild(top);
+ const fields=element('div','wb-step-fields');const d=element('div');const label=element('label','','Step type');const select=document.createElement('select');for(const name of ['Warm-up','Endurance','Threshold','VO₂max','Recovery','Cool-down','Custom']){const opt=document.createElement('option');opt.value=name;opt.textContent=name;select.appendChild(opt)}select.value=step.name;select.addEventListener('change',()=>{step.name=select.value;updateSummary()});d.append(label,select);fields.appendChild(d);
+ inputField(fields,'Duration (minutes)',step.minutes,v=>step.minutes=v,{step:0.5,max:1440,placeholder:'e.g. 8'});
+ inputField(fields,'Target power (W)',step.watts,v=>step.watts=v,{placeholder:'e.g. 312'});
+ row.appendChild(fields);container.appendChild(row);
+}
+function renderBlocks(){
+ const holder=$('wb-blocks');holder.innerHTML='';if(blocks.length===0)holder.appendChild(element('div','wb-empty','No steps yet. Add a step or a Repeat group to begin.'));
+ blocks.forEach((block,i)=>{
+  if(block.kind==='step'){renderStep(block,holder,()=>{blocks.splice(i,1);renderBlocks()},i+1);return}
+  const group=element('div','wb-repeat');const bar=element('div','wb-repeat-bar');bar.appendChild(element('div','wb-repeat-title',`↻ Repeat group ${i+1}`));const del=element('button','wb-icon','×');del.type='button';del.title='Remove repeat group';del.addEventListener('click',()=>{blocks.splice(i,1);renderBlocks()});bar.appendChild(del);group.appendChild(bar);
+  const fields=element('div','wb-repeat-fields');inputField(fields,'Repeat this group',block.count,v=>block.count=v,{min:2,max:60,placeholder:'e.g. 5'});
+  const toggle=element('label','wb-muted');const check=document.createElement('input');check.type='checkbox';check.checked=!!block.skipLastRecovery;check.style.cssText='width:auto;margin-right:7px';check.addEventListener('change',()=>{block.skipLastRecovery=check.checked;updateSummary()});toggle.append(check,document.createTextNode('Skip final recovery step on last repeat'));fields.appendChild(toggle);group.appendChild(fields);
+  const child=element('div','wb-repeat-steps');block.steps.forEach((step,j)=>renderStep(step,child,()=>{block.steps.splice(j,1);renderBlocks()},`${i+1}.${j+1}`));group.appendChild(child);
+  const add=element('button','mini-secondary','+ Add step inside repeat');add.type='button';add.addEventListener('click',()=>{block.steps.push(newStep('Recovery'));renderBlocks()});group.appendChild(add);holder.appendChild(group);
+ });updateSummary();
+}
+function updateSummary(){const d=metrics();$('wb-duration').textContent=d?`${Math.floor(d.minutes/60)} h ${Math.round(d.minutes%60)} min`:'—';$('wb-avg').textContent=d?d.avg+' W':'—';$('wb-kj').textContent=d?d.kj.toLocaleString()+' kJ':'—';$('wb-carbs').textContent=d?Math.round(carbRate($('wb-type').value,d.minutes/60)*d.minutes/60)+' g':'—'}
+$('wb-type').addEventListener('change',updateSummary);
+$('wb-add').addEventListener('click',()=>{blocks.push(newStep(blocks.length===0?'Warm-up':'Endurance'));renderBlocks()});
+$('wb-add-repeat').addEventListener('click',()=>{const group=newRepeat();if(blocks.length===0)group.steps[0].name='Warm-up';blocks.push(group);renderBlocks()});
+$('wb-clear').addEventListener('click',()=>{blocks=[];editingId=null;$('wb-message').textContent='';renderBlocks()});
+function workoutObject(shouldValidate=true){
+ const d=metrics();
+ if(!d){if(shouldValidate)$('wb-message').textContent='Complete each step, with a valid duration and target power. Repeat groups need at least 2 rounds and one complete step.';return null}
+ const date=$('wb-date').value;
+ if(shouldValidate&&(!/^\d{4}-\d{2}-\d{2}$/.test(date)||Number.isNaN(new Date(date+'T12:00:00').getTime()))){$('wb-message').textContent='Choose a valid workout date before saving.';return null}
+ const title=$('wb-title').value.trim();
+ if(shouldValidate&&!title){$('wb-message').textContent='Enter a workout name before saving.';return null}
+ return{id:editingId||('w'+Date.now()+'_'+Math.random().toString(36).slice(2,7)),date,title:title||'Untitled workout',type:$('wb-type').value,blocks:JSON.parse(JSON.stringify(blocks)),...d};
+}
+function useRide(workout){const total=workout.minutes;const type=$('type');type.value=workout.type;type.dispatchEvent(new Event('change',{bubbles:true}));$('hours').value=Math.floor(total/60);$('mins').value=String(Math.round(total%60));$('power').value=workout.avg;$('hours').dispatchEvent(new Event('input',{bubbles:true}));$('power').dispatchEvent(new Event('input',{bubbles:true}));navigate('plan')}
+$('wb-to-ride').addEventListener('click',()=>{const workout=workoutObject(false);if(workout)useRide(workout);else $('wb-message').textContent='Complete the workout steps to calculate the ride plan.'});
+$('wb-save').addEventListener('click',()=>{$('wb-message').textContent='';const workout=workoutObject(true);if(!workout)return;const idx=saved.findIndex(w=>w.id===workout.id);if(idx>=0)saved[idx]=workout;else saved.push(workout);persist();editingId=workout.id;selected=workout.date;displayed=new Date(fromKey(selected).getFullYear(),fromKey(selected).getMonth(),1);$('wb-message').textContent='Saved to calendar.';navigate('calendar')});
+function migrateBlocks(original){
+ if(!Array.isArray(original))return [];
+ return original.map(b=>{if(b.kind==='step'||b.kind==='repeat')return b; if(Number(b.reps)>1){const steps=[{kind:'step',name:b.name||'Threshold',minutes:String(b.minutes??''),watts:String(b.watts??'')}];if(Number(b.restMin)>0)steps.push({kind:'step',name:'Recovery',minutes:String(b.restMin),watts:String(b.restW??0)});return{kind:'repeat',count:String(b.reps),skipLastRecovery:Number(b.restMin)>0,steps}}return{kind:'step',name:b.name||'Endurance',minutes:String(b.minutes??''),watts:String(b.watts??'')}});
+}
+function openBuilder(date,entry){selected=date;$('wb-date').value=date;if(entry){editingId=entry.id;blocks=migrateBlocks(JSON.parse(JSON.stringify(entry.blocks)));$('wb-title').value=entry.title;$('wb-type').value=entry.type}else{editingId=null;blocks=[];$('wb-title').value='';$('wb-type').value='endurance'}$('wb-message').textContent='';renderBlocks();navigate('builder')}
+function drawCalendar(){const year=displayed.getFullYear(),month=displayed.getMonth();$('cal-month-label').textContent=displayed.toLocaleDateString('en-ZA',{month:'long',year:'numeric'});const first=new Date(year,month,1),padding=(first.getDay()+6)%7,days=new Date(year,month+1,0).getDate();const cells=$('cal-grid');cells.innerHTML='';const total=Math.ceil((padding+days)/7)*7;for(let n=0;n<total;n++){const d=new Date(year,month,n-padding+1),date=keyDate(d),entries=saved.filter(x=>x.date===date);const cell=document.createElement('button');cell.type='button';cell.className='cal-cell'+(d.getMonth()!==month?' is-other':'')+(date===selected?' is-selected':'')+(date===keyDate(today)?' is-today':'');const num=document.createElement('span');num.className='cal-number';num.textContent=d.getDate();cell.appendChild(num);for(const entry of entries.slice(0,2)){const chip=document.createElement('span');chip.className='cal-chip';chip.textContent=entry.title;cell.appendChild(chip)}if(entries.length>2){const more=document.createElement('span');more.className='cal-chip';more.textContent=`+${entries.length-2} more`;cell.appendChild(more)}cell.setAttribute('aria-label',date+'; '+entries.length+' workouts');cell.addEventListener('click',()=>{selected=date;if(d.getMonth()!==month)displayed=new Date(d.getFullYear(),d.getMonth(),1);drawCalendar()});cells.appendChild(cell)}drawDay()}
+function drawDay(){const d=fromKey(selected);$('selected-day-title').textContent=d.toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});const list=$('cal-day-list');list.innerHTML='';const entries=saved.filter(x=>x.date===selected);if(!entries.length){const p=document.createElement('p');p.className='sub';p.textContent='No workouts planned for this date.';list.appendChild(p);return}for(const workout of entries){const item=document.createElement('div');item.className='cal-list-item';const desc=document.createElement('div');const name=document.createElement('strong');name.textContent=workout.title;const detail=document.createElement('small');detail.textContent=`${workout.minutes} min · ${workout.avg} W average · ${workout.kj.toLocaleString()} kJ`;desc.append(name,detail);const actions=document.createElement('div');actions.className='row';actions.style.cssText='gap:6px;flex-wrap:wrap';function btn(title,action,cls='mini-secondary'){const button=document.createElement('button');button.type='button';button.className=cls;button.textContent=title;button.addEventListener('click',action);actions.appendChild(button)}btn('Ride plan + meals',()=>useRide(workout),'mini-orange');btn('Edit',()=>openBuilder(workout.date,workout));btn('Delete',()=>{if(confirm('Delete this workout from your calendar?')){saved=saved.filter(w=>w.id!==workout.id);persist();drawCalendar()}});item.append(desc,actions);list.appendChild(item)}}
+$('cal-prev').addEventListener('click',()=>{displayed=new Date(displayed.getFullYear(),displayed.getMonth()-1,1);drawCalendar()});$('cal-next').addEventListener('click',()=>{displayed=new Date(displayed.getFullYear(),displayed.getMonth()+1,1);drawCalendar()});$('cal-today').addEventListener('click',()=>{selected=keyDate(today);displayed=new Date(today.getFullYear(),today.getMonth(),1);drawCalendar()});$('cal-add-workout').addEventListener('click',()=>openBuilder(selected));
+$('wb-date').value=selected;renderBlocks();drawCalendar();
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(err => console.warn('Offline caching unavailable',err)));
+}
+</script>
+</body></html>
