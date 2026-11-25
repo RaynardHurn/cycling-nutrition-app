@@ -46,6 +46,18 @@ input[readonly]{background:#fff!important;color:#183448;cursor:default}
 .wb-muted{font-size:12px;color:var(--muted)}
 .wb-step-error{border-color:#ce6a46;background:#fff8f4}
 @media(max-width:620px){.wb-step-fields{grid-template-columns:1fr 1fr}.wb-step-fields>div:first-child{grid-column:1/-1}.wb-repeat-steps{padding-left:8px}.wb-repeat{padding:10px}.wb-repeat-fields>div{width:110px}}
+
+/* Date-linked meal planning */
+.date-meal-controls{display:grid;grid-template-columns:1fr 1.4fr auto;gap:12px;align-items:end}
+.date-meal-controls.actual-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.date-meal-controls label{display:block;font-size:12px;font-weight:700;color:var(--navy,#102d3e);margin-bottom:7px}
+.date-meal-controls input,.date-meal-controls select{width:100%;min-width:0;min-height:44px}
+.date-meal-action button{min-height:44px;white-space:nowrap}
+.date-meal-message{margin-top:14px;border:1px solid #f3d6b5;background:#fff7ec;border-radius:11px;padding:13px 15px;font-size:13px;line-height:1.6}
+.actual-header{margin-top:20px;border-top:1px solid #e7eaef;padding-top:14px}
+.actual-header h3{margin:0 0 5px;font-size:17px}.actual-header .sub{margin-top:0}
+.actual-toggle{display:flex;gap:8px;align-items:center;font-size:12px;color:#445665}.actual-toggle input{width:auto;accent-color:#f18b24}
+@media(max-width:720px){.date-meal-controls,.date-meal-controls.actual-grid{grid-template-columns:1fr}.date-meal-action button{width:100%}}
 </style>
 <link rel="manifest" href="./manifest.webmanifest">
 <meta name="theme-color" content="#102c3e">
@@ -53,8 +65,8 @@ input[readonly]{background:#fff!important;color:#183448;cursor:default}
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Cycling Fuel">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
-</head><body>
-<header><div class="width hero"><div class="eyebrow">2027 Performance Nutrition</div><h1>CYCLING FUELING CALCULATOR</h1><p><span id="profile-heading">Personal reference · 70 kg · FTP 316 W</span> · Works offline</p></div></header>
+<style id="auth-gate-css">html:not(.cloud-ready) body>header, html:not(.cloud-ready) body>.main-nav, html:not(.cloud-ready) body>main, html:not(.cloud-ready) body>footer {display:none!important}#cloud-auth-cover{position:fixed;inset:0;z-index:9999;background:#f5f7f9;display:flex;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif;color:#102c3e}#cloud-auth-card{background:white;border:1px solid #dae4e9;border-top:6px solid #f18b24;box-shadow:0 12px 45px #102c3e18;border-radius:16px;padding:26px;max-width:430px;width:100%}#cloud-auth-card h2{margin:0 0 9px;font-size:23px}#cloud-auth-card p{color:#526a79;font-size:14px;line-height:1.5}#cloud-auth-card label{display:block;font-weight:650;margin-top:14px;font-size:13px}#cloud-auth-card input{width:100%;margin-top:6px;border-radius:9px;border:1px solid #b8ccd6;padding:12px;font-size:15px}#cloud-auth-card button{margin-top:14px;width:100%;border-radius:8px;border:0;padding:12px;cursor:pointer;background:#f18b24;color:#fff;font-weight:750}#cloud-auth-card button.secondary{background:#102c3e}#cloud-auth-card button.link{background:transparent;color:#102c3e;margin-top:4px;padding:8px;text-decoration:underline}#cloud-auth-status{font-size:13px;line-height:1.5;margin-top:12px;white-space:pre-wrap}#cloud-userbar{background:#fff3e6;padding:9px 18px;border-bottom:1px solid #f4d1a8;font:13px system-ui,sans-serif;color:#102c3e;display:flex;align-items:center;justify-content:space-between;gap:10px}#cloud-userbar button{background:#102c3e;color:#fff;border:0;border-radius:7px;padding:7px 13px;cursor:pointer}html.cloud-ready #cloud-auth-cover{display:none}</style></head><body>
+<header><div class="width hero"><div class="eyebrow">2027 Performance Nutrition</div><h1>CYCLING FUELING CALCULATOR</h1><p><span id="profile-heading">Personal reference · 70 kg · FTP 316 W</span> · Cloud login needs internet</p></div></header>
 <nav class="main-nav" aria-label="Calculator pages"><div class="width nav-inner"><button type="button" id="nav-plan" class="nav-button selected" aria-current="page">Build your ride plan</button><button type="button" id="nav-meals" class="nav-button">Meal Planner</button><button type="button" id="nav-info" class="nav-button">Information</button><button type="button" id="nav-calendar" class="nav-button">Calendar</button><button type="button" id="nav-builder" class="nav-button">Workout Builder</button><button type="button" id="nav-settings" class="nav-button">Settings</button></div></nav>
 <main class="width">
 <div id="page-plan">
@@ -83,6 +95,24 @@ input[readonly]{background:#fff!important;color:#183448;cursor:default}
 </div>
 <div id="page-meals" hidden>
 <section class="panel"><h2>Meal Planner <span class="pill">LINKED TO RIDE PLAN</span></h2><p class="sub">Your suggested portions update automatically when the ride plan changes. Return to Build Your Ride Plan to adjust the session, then come back here to choose meals.</p></section>
+<section class="panel" id="date-meal-planner">
+<h2>Plan food for a specific day <span class="pill">CALENDAR LINKED</span></h2>
+<p class="sub">Choose tomorrow or any other date. Your planned calendar workout is used for pre-ride and on-bike fueling. After the ride, enter your actual figures to update your food plan.</p>
+<div class="date-meal-controls">
+ <div><label for="meal-date">Choose date</label><input id="meal-date" type="date"></div>
+ <div><label for="meal-workout">Scheduled workout</label><select id="meal-workout"><option value="">No scheduled workout</option></select></div>
+ <div class="date-meal-action"><button type="button" class="mini-orange" id="meal-load">Load this day</button></div>
+</div>
+<div id="meal-workout-details" class="date-meal-message" role="status">Choose a date to load the training plan.</div>
+<div class="actual-header"><h3>Completed ride (optional)</h3><p class="sub">Complete this after the workout. Leave blank when planning a future day.</p></div>
+<div class="date-meal-controls actual-grid">
+ <div><label for="meal-actual-power">Actual average power (W)</label><input id="meal-actual-power" type="number" min="0" max="700" placeholder="e.g. 195"></div>
+ <div><label for="meal-actual-duration">Actual duration (minutes)</label><input id="meal-actual-duration" type="number" min="1" max="1440" placeholder="e.g. 120"></div>
+ <div><label for="meal-actual-carbs">Carbs consumed on bike (g, optional)</label><input id="meal-actual-carbs" type="number" min="0" max="1500" placeholder="Leave blank if unknown"></div>
+</div>
+<div class="row meal-log-buttons" style="gap:8px;flex-wrap:wrap;margin-top:12px"><button type="button" class="mini-orange" id="meal-save-actual">Save completed ride</button><button type="button" class="mini-secondary" id="meal-clear-actual">Remove completed figures</button><label class="actual-toggle"><input type="checkbox" id="meal-energy-adjust" checked> Allow small food adjustments for actual vs planned energy</label></div>
+<div class="date-meal-message" id="meal-actual-message" aria-live="polite">Your future-day meal plan uses planned workload until you record the completed ride.</div>
+</section>
 <section class="panel" id="foodplanner"><h2>Your automatic meal planner <span class="pill">LINKED TO RIDE</span></h2>
 <p class="sub">Choose your ride above. This planner automatically uses the daily carbohydrates remaining after ride fuel, then suggests exact ingredient portions for breakfast, lunch, dinner and flexible snacks. Use “New meal ideas” for different dishes.</p>
 <div class="meal-summary">
@@ -282,7 +312,7 @@ function saveSettings(){
  const candidate=valid({weight:num('setting-weight'),ftp:num('setting-ftp')});
  if(!candidate){$('settings-status').textContent='Please enter valid weight and FTP values.';return}
  Object.assign(profile,candidate);
- try{localStorage.setItem(KEY,JSON.stringify(profile));$('settings-status').textContent='Settings saved on this browser.'}catch(e){$('settings-status').textContent='Settings applied, but the browser did not allow saving.'}
+ try{localStorage.setItem(KEY,JSON.stringify(profile));window.appCloudSave?.();$('settings-status').textContent='Settings saved on this browser.'}catch(e){$('settings-status').textContent='Settings applied, but the browser did not allow saving.'}
  applySettingsToForm();
  $('power').value=zonePower($('type').value);
  manualDaily=false;update();
@@ -396,8 +426,8 @@ function format(n){return Math.round(n).toLocaleString('en-ZA')}
 let currentSummary='';
 function draw(){
  const type=$('type').value;
- const carbsDaily=Number($('out-daily').textContent.replace(/[^\d]/g,''))||0;
- const rideCarbs=Number($('out-total').textContent.replace(/[^\d]/g,''))||0;
+ const carbsDaily=Math.max(0,(Number($('out-daily').textContent.replace(/[^\d]/g,''))||0)+(Number(window.cyclingMealAdjustmentGrams)||0));
+ const rideCarbs=Number(window.cyclingLoggedOnBikeCarbs??(Number($('out-total').textContent.replace(/[^\d]/g,''))||0));
  const available=Math.max(0,carbsDaily-rideCarbs);
  const protein=proteinGoal(type);
  const shares={breakfast:.27,lunch:.29,dinner:.29,snack:.15};
@@ -463,7 +493,7 @@ for(const id of PAGES)$('nav-'+id).addEventListener('click',()=>navigate(id));
 const STORE='raynardTrainingCalendarV1';
 let saved=[];
 try {const data=JSON.parse(localStorage.getItem(STORE)||'[]'); if(Array.isArray(data))saved=data.filter(x=>x && /^\d{4}-\d{2}-\d{2}$/.test(x.date) && Array.isArray(x.blocks));}catch(e){}
-function persist(){try{localStorage.setItem(STORE,JSON.stringify(saved));return true}catch(e){alert('Your browser could not save workouts. Try another browser or enable local storage.');return false}}
+function persist(){try{localStorage.setItem(STORE,JSON.stringify(saved));window.appCloudSave?.();return true}catch(e){alert('Your browser could not save workouts. Try another browser or enable local storage.');return false}}
 function keyDate(d){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
 function fromKey(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
 const today=new Date();let displayed=new Date(today.getFullYear(),today.getMonth(),1);let selected=keyDate(today);let editingId=null;
@@ -546,13 +576,94 @@ function openBuilder(date,entry){selected=date;$('wb-date').value=date;if(entry)
 function drawCalendar(){const year=displayed.getFullYear(),month=displayed.getMonth();$('cal-month-label').textContent=displayed.toLocaleDateString('en-ZA',{month:'long',year:'numeric'});const first=new Date(year,month,1),padding=(first.getDay()+6)%7,days=new Date(year,month+1,0).getDate();const cells=$('cal-grid');cells.innerHTML='';const total=Math.ceil((padding+days)/7)*7;for(let n=0;n<total;n++){const d=new Date(year,month,n-padding+1),date=keyDate(d),entries=saved.filter(x=>x.date===date);const cell=document.createElement('button');cell.type='button';cell.className='cal-cell'+(d.getMonth()!==month?' is-other':'')+(date===selected?' is-selected':'')+(date===keyDate(today)?' is-today':'');const num=document.createElement('span');num.className='cal-number';num.textContent=d.getDate();cell.appendChild(num);for(const entry of entries.slice(0,2)){const chip=document.createElement('span');chip.className='cal-chip';chip.textContent=entry.title;cell.appendChild(chip)}if(entries.length>2){const more=document.createElement('span');more.className='cal-chip';more.textContent=`+${entries.length-2} more`;cell.appendChild(more)}cell.setAttribute('aria-label',date+'; '+entries.length+' workouts');cell.addEventListener('click',()=>{selected=date;if(d.getMonth()!==month)displayed=new Date(d.getFullYear(),d.getMonth(),1);drawCalendar()});cells.appendChild(cell)}drawDay()}
 function drawDay(){const d=fromKey(selected);$('selected-day-title').textContent=d.toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});const list=$('cal-day-list');list.innerHTML='';const entries=saved.filter(x=>x.date===selected);if(!entries.length){const p=document.createElement('p');p.className='sub';p.textContent='No workouts planned for this date.';list.appendChild(p);return}for(const workout of entries){const item=document.createElement('div');item.className='cal-list-item';const desc=document.createElement('div');const name=document.createElement('strong');name.textContent=workout.title;const detail=document.createElement('small');detail.textContent=`${workout.minutes} min · ${workout.avg} W average · ${workout.kj.toLocaleString()} kJ`;desc.append(name,detail);const actions=document.createElement('div');actions.className='row';actions.style.cssText='gap:6px;flex-wrap:wrap';function btn(title,action,cls='mini-secondary'){const button=document.createElement('button');button.type='button';button.className=cls;button.textContent=title;button.addEventListener('click',action);actions.appendChild(button)}btn('Ride plan + meals',()=>useRide(workout),'mini-orange');btn('Edit',()=>openBuilder(workout.date,workout));btn('Delete',()=>{if(confirm('Delete this workout from your calendar?')){saved=saved.filter(w=>w.id!==workout.id);persist();drawCalendar()}});item.append(desc,actions);list.appendChild(item)}}
 $('cal-prev').addEventListener('click',()=>{displayed=new Date(displayed.getFullYear(),displayed.getMonth()-1,1);drawCalendar()});$('cal-next').addEventListener('click',()=>{displayed=new Date(displayed.getFullYear(),displayed.getMonth()+1,1);drawCalendar()});$('cal-today').addEventListener('click',()=>{selected=keyDate(today);displayed=new Date(today.getFullYear(),today.getMonth(),1);drawCalendar()});$('cal-add-workout').addEventListener('click',()=>openBuilder(selected));
+window.cyclingCalendarAPI={
+ listForDate:date=>saved.filter(w=>w.date===date).map(w=>({id:w.id,date:w.date,title:w.title,type:w.type,minutes:w.minutes,avg:w.avg,kj:w.kj})),
+ getById:id=>{const w=saved.find(x=>x.id===id);return w?{id:w.id,date:w.date,title:w.title,type:w.type,minutes:w.minutes,avg:w.avg,kj:w.kj}:null},
+ goToCalendar:date=>{if(/^\d{4}-\d{2}-\d{2}$/.test(date)){selected=date;const dt=fromKey(date);displayed=new Date(dt.getFullYear(),dt.getMonth(),1)}navigate('calendar')}
+};
+document.dispatchEvent(new Event('cyclingCalendarReady'));
 $('wb-date').value=selected;renderBlocks();drawCalendar();
 })();
 </script>
 
 <script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const storageKey='raynardMealCompletedRidesV1';
+let actual={};try{const loaded=JSON.parse(localStorage.getItem(storageKey)||'{}');if(loaded&&typeof loaded==='object'&&!Array.isArray(loaded))actual=loaded}catch(e){}
+const localDate=(date)=>`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);
+$('meal-date').value=localDate(tomorrow);
+const round=n=>Math.round(n).toLocaleString('en-ZA');
+let loadedWorkout=null;
+let suspend=false;
+function persist(){try{localStorage.setItem(storageKey,JSON.stringify(actual));window.appCloudSave?.();return true}catch(e){$('meal-actual-message').textContent='Could not save the completed ride on this browser. Export/back up your data before changing devices.';return false}}
+function workouts(){return window.cyclingCalendarAPI?.listForDate($('meal-date').value)||[]}
+function updateSelections(){
+ const list=workouts();const select=$('meal-workout');const previous=select.value;select.replaceChildren();
+ for(const w of list){const opt=document.createElement('option');opt.value=w.id;opt.textContent=`${w.title} · ${Math.round(w.minutes)} min · ${w.avg} W`;select.appendChild(opt)}
+ if(!list.length){const opt=document.createElement('option');opt.value='';opt.textContent='No scheduled workout';select.appendChild(opt)}
+ else if(list.some(w=>w.id===previous))select.value=previous;
+}
+function updateRideInputs(type,minutes,watts){
+ suspend=true;
+ const kind=$('type');kind.value=type;kind.dispatchEvent(new Event('change',{bubbles:true}));
+ $('hours').value=Math.floor(minutes/60);$('mins').value=Math.round(minutes%60);$('power').value=watts;
+ $('hours').dispatchEvent(new Event('input',{bubbles:true}));$('power').dispatchEvent(new Event('input',{bubbles:true}));
+ suspend=false;
+}
+function renderActual(){
+ const key=loadedWorkout?.id;if(!key)return;
+ const record=actual[key];const plannedKj=loadedWorkout.kj??Math.round(loadedWorkout.minutes*loadedWorkout.avg*.06);
+ if(!record){window.cyclingMealAdjustmentGrams=0;$('meal-actual-power').value='';$('meal-actual-duration').value='';$('meal-actual-carbs').value='';$('meal-actual-message').textContent='Planned fueling is shown. After your ride, enter actual watts, duration and optionally carbs consumed.';return}
+ $('meal-actual-power').value=record.power;$('meal-actual-duration').value=record.minutes;
+ $('meal-actual-carbs').value=record.carbs===null?'':record.carbs;
+ const kj=Math.round(record.power*record.minutes*.06);const difference=kj-plannedKj;
+ const shift=Math.round(difference/4); // only a rough energy-equivalent food adjustment, not measured carb oxidation
+ window.cyclingMealAdjustmentGrams=$('meal-energy-adjust').checked?shift:0;
+ $('meal-actual-message').textContent=`Planned work: ${round(plannedKj)} kJ · Completed work: ${round(kj)} kJ (${difference>=0?'+':''}${round(difference)} kJ). ${Math.abs(shift)<1?'No meaningful food adjustment.':$('meal-energy-adjust').checked?`Optional meal carbohydrate-equivalent adjustment: ${shift>=0?'+':''}${shift} g, based on the approximate energy difference.`:'Automatic food adjustment disabled.'} This is a rough portion-planning estimate, not a measurement of carbohydrate burned.`;
+}
+function overrideConsumedCarbs(){
+ const record=loadedWorkout&&actual[loadedWorkout.id];
+ if(!record||record.carbs===null)return;
+ // The existing planner normally subtracts its estimated ride fuel; override it with the logged actual amount.
+ window.cyclingLoggedOnBikeCarbs=record.carbs;
+}
+function reload(){
+ window.cyclingLoggedOnBikeCarbs=null;
+ updateSelections();loadedWorkout=window.cyclingCalendarAPI?.getById($('meal-workout').value)||null;
+ if(!loadedWorkout){window.cyclingMealAdjustmentGrams=0;$('meal-workout-details').textContent='No workout saved for this date. Add it in Calendar / Workout Builder. Until then the meal suggestions below are based on the current Build Your Ride Plan, not the selected date.';$('meal-actual-power').value='';$('meal-actual-duration').value='';$('meal-actual-carbs').value='';$('meal-actual-message').textContent='Add a planned workout before logging actual data.';document.dispatchEvent(new Event('nutritionUpdate'));return}
+ const w=loadedWorkout;const record=actual[w.id];
+ updateRideInputs(w.type,record?record.minutes:w.minutes,record?record.power:w.avg);
+ $('meal-workout-details').textContent=`${w.title} · Planned ${round(w.minutes)} min at ${round(w.avg)} W · ${round(w.kj)} kJ. ${record?'Showing recorded ride values.':'Showing planned workout fueling for this date.'}`;
+ window.cyclingMealAdjustmentGrams=0;
+ renderActual();overrideConsumedCarbs();
+ document.dispatchEvent(new Event('nutritionUpdate'));
+}
+$('meal-date').addEventListener('change',reload);
+$('meal-workout').addEventListener('change',reload);
+$('meal-load').addEventListener('click',reload);
+$('meal-energy-adjust').addEventListener('change',()=>{if(loadedWorkout)reload()});
+$('meal-save-actual').addEventListener('click',()=>{
+ if(!loadedWorkout){$('meal-actual-message').textContent='Please select a scheduled workout first.';return}
+ const rawPower=$('meal-actual-power').value.trim(),rawMin=$('meal-actual-duration').value.trim(),rawCarbs=$('meal-actual-carbs').value.trim();
+ const power=Number(rawPower.replace(',','.')), minutes=Number(rawMin.replace(',','.')),carbs=rawCarbs===''?null:Number(rawCarbs.replace(',','.'));
+ if(!rawPower||!rawMin||!Number.isFinite(power)||power<0||power>700||!Number.isFinite(minutes)||minutes<=0||minutes>1440||(carbs!==null&&(!Number.isFinite(carbs)||carbs<0||carbs>1500))){$('meal-actual-message').textContent='Enter valid actual average power (0–700 W), duration (1–1440 minutes), and optional carbs consumed (0–1500 g).';return}
+ actual[loadedWorkout.id]={power,minutes,carbs};if(persist())reload();
+});
+$('meal-clear-actual').addEventListener('click',()=>{if(!loadedWorkout)return;delete actual[loadedWorkout.id];if(persist())reload()});
+document.addEventListener('cyclingCalendarReady',reload);
+// Initialize even if the calendar script finished before this script executed.
+reload();
+})();
+</script>
+<script>
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(err => console.warn('Offline caching unavailable',err)));
 }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="cloud-config.js"></script>
+<script src="cloud-auth.js"></script>
 </body></html>

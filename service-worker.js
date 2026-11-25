@@ -1,5 +1,5 @@
-const CACHE_NAME = 'cycling-fuel-v1';
-const ASSETS = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
+const CACHE_NAME = 'cycling-fuel-v4-main-cloud-20261125';
+const ASSETS = ['./', './index.html', './manifest.webmanifest', './cloud-auth.js', './cloud-config.js', './icons/icon-192.png', './icons/icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
