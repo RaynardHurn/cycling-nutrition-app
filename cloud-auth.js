@@ -22,7 +22,7 @@
   function snapshot(){const o={};KEYS.forEach(k=>{const v=localStorage.getItem(k);if(v!==null)o[k]=JSON.parse(v)});return o}
   function clearUserData(){[...KEYS,...OLD].forEach(k=>localStorage.removeItem(k))}
   function restore(data){clearUserData();KEYS.forEach(k=>{if(Object.hasOwn(data,k))localStorage.setItem(k,JSON.stringify(data[k]))})}
-  const marker='cycling-cloud-loaded';
+  const marker='cycling-cloud-loaded:'+location.pathname.split('/').filter(Boolean)[0];
   async function loadForUser(u){
     status('Loading your saved data...');
     // Never expose a previous account's cached data before checking cloud state.
@@ -53,7 +53,8 @@
     const label=document.createElement('span');label.textContent='Signed in: '+(u.email||'account');
     const logout=document.createElement('button');logout.textContent='Log out';
     logout.onclick=async()=>{active=false;window.appCloudSave=undefined;clearTimeout(saveTimer);await flush();await client.auth.signOut();clearUserData();localStorage.removeItem('cycling-cloud-owner');sessionStorage.removeItem(marker);location.reload()};
-    bar.append(label,logout);
+    const backup=document.createElement('button');backup.type='button';backup.textContent='Download backup';backup.title='Download a copy of your saved settings, workouts and completed rides';backup.onclick=()=>{try{const payload={format:'cycling-nutrition-backup-v1',exported_at:new Date().toISOString(),data:snapshot()};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cycling-nutrition-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}catch(e){alert('Could not download backup: '+e.message)}};
+    bar.append(label,backup,logout);
     const nav=document.querySelector('nav.main-nav');
     if(nav)nav.before(bar);else document.body.prepend(bar);
     status('');
